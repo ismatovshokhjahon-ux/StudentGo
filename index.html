@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>StudentGo</title>
+<style>
+:root{--bg:#f5f3ff;--card:#fff;--tx:#1e1b3a;--mut:#6b6890;--ac:#6d4aff;--ac2:#ff6b9d;--bd:#e4e0f8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13112a;--card:#1d1a3a;--tx:#f1efff;--mut:#a29fc8;--bd:#2f2b57}}
+:root[data-theme="dark"]{--bg:#13112a;--card:#1d1a3a;--tx:#f1efff;--mut:#a29fc8;--bd:#2f2b57}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 -apple-system,system-ui,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(135deg,#6d4aff,#b04bff 60%,#ff6b9d);color:#fff;padding:14px 16px 16px;border-radius:0 0 22px 22px}
+.logo{font-size:26px;font-weight:800;letter-spacing:-.5px}
+.tag{margin-top:6px;font-size:13px;background:rgba(255,255,255,.2);border-radius:20px;padding:5px 12px;display:inline-block}
+main{padding:10px 16px 96px;max-width:560px;margin:auto}
+h2{margin:8px 0 4px;font-size:20px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:12px;margin:10px 0;box-shadow:0 2px 8px rgba(109,74,255,.06)}
+.row{display:flex;align-items:center;gap:10px}
+.grow{flex:1;min-width:0}
+.em{font-size:34px}
+.price{color:var(--ac);font-weight:700}
+.mut{color:var(--mut);font-size:13px}
+button{font:inherit;border:0;border-radius:12px;padding:9px 14px;background:var(--ac);color:#fff;cursor:pointer}
+button.g{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+button.sm{padding:4px 11px}
+a.btn{display:inline-block;text-decoration:none;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:12px;padding:9px 14px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0}
+.chips button{white-space:nowrap}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.tile{border-radius:20px;padding:16px 14px;color:#fff;min-height:128px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;cursor:pointer}
+.tile b{font-size:17px}.tile span{font-size:12px;opacity:.9}.tile i{font-style:normal;font-size:36px}
+input,select{width:100%;font:inherit;padding:10px;margin:5px 0;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;background:none;color:var(--mut);border-radius:0;padding:10px 2px;font-size:13px}
+nav button.on{color:var(--ac);font-weight:700}
+.badge{display:inline-block;background:var(--ac2);color:#fff;border-radius:9px;padding:0 6px;font-size:12px}
+.st{font-size:13px;font-weight:600}
+.wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pct{background:linear-gradient(135deg,#ff6b9d,#ff9a3c);color:#fff;border-radius:14px;padding:10px 12px;font-weight:800;font-size:20px}
+</style>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<header><div class="logo">🎓 StudentGo</div><div class="tag">Hammasi talabalar va ularning qulayligi uchun 💜</div></header>
+<main id="app"></main>
+<nav id="nav"></nav>
+<script>
+var FC=['🍔 Fast-food','🥤 Ichimliklar','🍰 Shirinliklar','🥘 Milliy taomlar','🥗 Salat va yengil','🍳 Nonushta'],SC=['👕 Kiyim','👖 Shim va ko’ylak','👟 Poyabzal','🎒 Sumkalar','⌚ Aksessuarlar','🎧 Elektronika'];
+var ST={new:'🆕 Yangi',accepted:'✅ Qabul qilindi',cooking:'👨‍🍳 Tayyorlanmoqda',ready:'📦 Tayyor',done:'✔️ Topshirildi',cancelled:'❌ Bekor qilindi'};
+var PIN='1234',COL={p:'products',h:'homes',d:'deals',o:'orders',q:'inquiries'};
+var DEF={
+p:[
+{id:'f1',s:'food',c:0,n:'Lavash (mol go’shtli)',p:32000,k:'Oqtepa Lavash',e:'🌯'},{id:'f2',s:'food',c:0,n:'Lavash (tovuqli)',p:28000,k:'Oqtepa Lavash',e:'🌯'},{id:'f3',s:'food',c:0,n:'Cheeseburger',p:28000,k:'EVOS',e:'🍔'},{id:'f4',s:'food',c:0,n:'Hot-dog',p:18000,k:'EVOS',e:'🌭'},{id:'f5',s:'food',c:0,n:'Kartoshka fri',p:15000,k:'EVOS',e:'🍟'},{id:'f6',s:'food',c:0,n:'Pitsa (kichik)',p:48000,k:'Chopar Pizza',e:'🍕'},{id:'f7',s:'food',c:0,n:'Pitsa Margarita',p:55000,k:'Bellissimo Pizza',e:'🍕'},{id:'f8',s:'food',c:0,n:'Chicken wings',p:42000,k:'Les Ailes',e:'🍗'},{id:'f9',s:'food',c:0,n:'Chicken burger',p:30000,k:'Max Way',e:'🍔'},{id:'f10',s:'food',c:0,n:'Doner',p:26000,k:'Max Way',e:'🥙'},
+{id:'f11',s:'food',c:1,n:'Choy',p:6000,k:'Safia',e:'🍵'},{id:'f12',s:'food',c:1,n:'Kofe (latte)',p:20000,k:'Safia',e:'☕'},{id:'f13',s:'food',c:1,n:'Kapuchino',p:18000,k:'Safia',e:'☕'},{id:'f14',s:'food',c:1,n:'Coca-Cola 0.5L',p:9000,k:'EVOS',e:'🥤'},{id:'f15',s:'food',c:1,n:'Limonad',p:16000,k:'Safia',e:'🍋'},{id:'f16',s:'food',c:1,n:'Sharbat',p:12000,k:'Safia',e:'🧃'},{id:'f17',s:'food',c:1,n:'Mineral suv',p:4000,k:'EVOS',e:'💧'},
+{id:'f18',s:'food',c:2,n:'Chizkeyk',p:24000,k:'Safia',e:'🍰'},{id:'f19',s:'food',c:2,n:'Napoleon',p:18000,k:'Safia',e:'🍮'},{id:'f20',s:'food',c:2,n:'Kruassan',p:12000,k:'Safia',e:'🥐'},{id:'f21',s:'food',c:2,n:'Donat',p:10000,k:'Safia',e:'🍩'},{id:'f22',s:'food',c:2,n:'Muzqaymoq',p:9000,k:'EVOS',e:'🍦'},
+{id:'f23',s:'food',c:3,n:'Osh (porsiya)',p:35000,k:'Besh Qozon osh markazi',e:'🍛'},{id:'f24',s:'food',c:3,n:'Lag’mon',p:32000,k:'Rayhon',e:'🍜'},{id:'f25',s:'food',c:3,n:'Manti (5 dona)',p:30000,k:'Rayhon',e:'🥟'},{id:'f26',s:'food',c:3,n:'Shashlik (2 sixli)',p:38000,k:'Rayhon',e:'🍢'},{id:'f27',s:'food',c:3,n:'Samsa',p:9000,k:'Rayhon',e:'🥧'},{id:'f28',s:'food',c:3,n:'Sho’rva',p:28000,k:'Rayhon',e:'🍲'},
+{id:'f29',s:'food',c:4,n:'Sezar salat',p:34000,k:'Safia',e:'🥗'},{id:'f30',s:'food',c:4,n:'Yunon salat',p:30000,k:'Safia',e:'🥒'},{id:'f31',s:'food',c:4,n:'Tovuqli sendvich',p:26000,k:'Safia',e:'🥪'},{id:'f32',s:'food',c:4,n:'Vitamin salat',p:22000,k:'Rayhon',e:'🥕'},
+{id:'f33',s:'food',c:5,n:'Omlet',p:20000,k:'Safia',e:'🍳'},{id:'f34',s:'food',c:5,n:'Sirniki',p:22000,k:'Safia',e:'🥞'},{id:'f35',s:'food',c:5,n:'Bo’tqa',p:16000,k:'Safia',e:'🥣'},{id:'f36',s:'food',c:5,n:'Tuxum va non',p:18000,k:'Rayhon',e:'🍞'},
+{id:'s1',s:'shop',c:0,n:'Hoodie (unisex)',p:190000,k:'LC Waikiki',e:'🧥'},{id:'s2',s:'shop',c:0,n:'Futbolka',p:80000,k:'DeFacto',e:'👕'},{id:'s3',s:'shop',c:0,n:'Polo ko’ylak',p:120000,k:'Koton',e:'👔'},{id:'s4',s:'shop',c:0,n:'Sviter',p:170000,k:'LC Waikiki',e:'🧶'},{id:'s5',s:'shop',c:0,n:'Kurtka (yengil)',p:320000,k:'Koton',e:'🧥'},{id:'s6',s:'shop',c:0,n:'Sport kostyum',p:260000,k:'DeFacto',e:'🏃'},
+{id:'s7',s:'shop',c:1,n:'Jins shim',p:230000,k:'Koton',e:'👖'},{id:'s8',s:'shop',c:1,n:'Klassik shim',p:210000,k:'LC Waikiki',e:'👖'},{id:'s9',s:'shop',c:1,n:'Shortik',p:110000,k:'DeFacto',e:'🩳'},{id:'s10',s:'shop',c:1,n:'Yubka',p:150000,k:'Koton',e:'👗'},{id:'s11',s:'shop',c:1,n:'Ko’ylak (rasmiy)',p:170000,k:'LC Waikiki',e:'👔'},
+{id:'s12',s:'shop',c:2,n:'Krossovka',p:350000,k:'DeFacto',e:'👟'},{id:'s13',s:'shop',c:2,n:'Klassik tufli',p:380000,k:'LC Waikiki',e:'👞'},{id:'s14',s:'shop',c:2,n:'Botinka (qish)',p:450000,k:'Koton',e:'🥾'},{id:'s15',s:'shop',c:2,n:'Shippak',p:60000,k:'LC Waikiki',e:'🩴'},
+{id:'s16',s:'shop',c:3,n:'Talaba ryukzagi',p:160000,k:'LC Waikiki',e:'🎒'},{id:'s17',s:'shop',c:3,n:'Noutbuk sumkasi',p:210000,k:'Mediapark',e:'💼'},{id:'s18',s:'shop',c:3,n:'Yelka sumkasi',p:130000,k:'Koton',e:'👜'},{id:'s19',s:'shop',c:3,n:'Hamyon',p:70000,k:'DeFacto',e:'👛'},
+{id:'s20',s:'shop',c:4,n:'Smart soat',p:350000,k:'Mediapark',e:'⌚'},{id:'s21',s:'shop',c:4,n:'Quyosh ko’zoynagi',p:90000,k:'Koton',e:'🕶️'},{id:'s22',s:'shop',c:4,n:'Kepka',p:60000,k:'DeFacto',e:'🧢'},{id:'s23',s:'shop',c:4,n:'Sharf va qo’lqop',p:85000,k:'LC Waikiki',e:'🧣'},{id:'s24',s:'shop',c:4,n:'Kamar',p:75000,k:'Koton',e:'🪢'},
+{id:'s25',s:'shop',c:5,n:'Simsiz quloqchin',p:220000,k:'Texnomart',e:'🎧'},{id:'s26',s:'shop',c:5,n:'Powerbank 10000 mAh',p:150000,k:'Mediapark',e:'🔋'},{id:'s27',s:'shop',c:5,n:'Telefon g’ilofi',p:45000,k:'Texnomart',e:'📱'},{id:'s28',s:'shop',c:5,n:'Zaryadka (tez)',p:90000,k:'Mediapark',e:'🔌'},{id:'s29',s:'shop',c:5,n:'Flesh-xotira 64 GB',p:80000,k:'Asaxiy',e:'💾'},{id:'s30',s:'shop',c:5,n:'Sichqoncha (simsiz)',p:110000,k:'Texnomart',e:'🖱️'}],
+h:[{id:'h1',n:'Xona universitet yaqinida',p:1800000,a:'Mirobod, Buyuk Ipak Yo’li hududi',r:'1 xona',m:'UWED (Buyuk Ipak Yo’li, 54) ga yaqin',ph:'',e:'🏢'},{id:'h2',n:'Talabalar uchun hamxona',p:1000000,a:'Yunusobod, Yangi O’zbekiston ko’chasi yaqinida',r:'Xona (hamxonali)',m:'Metro va bozor yaqin',ph:'',e:'🛏️'},{id:'h3',n:'2 xonali kvartira',p:3500000,a:'Chilonzor',r:'2 xona',m:'Mebelli, internet bor',ph:'',e:'🏠'},{id:'h4',n:'Hamxona kerak',p:1500000,a:'Mirzo Ulug’bek',r:'Xona',m:'2 ta talaba bilan',ph:'',e:'🛋️'},{id:'h5',n:'WIUT talabalar yotoqxonasi',p:0,a:'Yakkasaroy, Istiqbol ko’chasi, 12-uy',r:'Yotoqxona',m:'Joy va narxni universitetdan aniqlang',ph:'+998712387400',e:'🎓'},
+{id:'h6',n:'Studiya kvartira',p:2800000,a:'Yakkasaroy',r:'Studiya',m:'Yangi ta’mir, mebelli',ph:'',e:'🏙️'},{id:'h7',n:'3 xonali (4 talabaga)',p:4000000,a:'Chilonzor',r:'3 xona',m:'Bo’lib to’lash mumkin',ph:'',e:'🏘️'},{id:'h8',n:'Arzon xona',p:700000,a:'Sergeli',r:'Xona',m:'Avtobus bekati yaqin',ph:'',e:'🚪'},{id:'h9',n:'1 xonali kvartira',p:2200000,a:'Yunusobod',r:'1 xona',m:'Konditsioner, kir yuvish mashinasi',ph:'',e:'🏢'},{id:'h10',n:'Qizlar uchun hamxona',p:1200000,a:'Mirobod',r:'Xona (hamxonali)',m:'Tinch va xavfsiz hudud',ph:'',e:'🌸'},{id:'h11',n:'2 xonali, mebelsiz',p:2500000,a:'Mirzo Ulug’bek',r:'2 xona',m:'Metroga 7 daqiqa',ph:'',e:'🏠'},{id:'h12',n:'Yigitlar uchun hamxona',p:900000,a:'Shayxontohur',r:'Xona (hamxonali)',m:'Markazga yaqin',ph:'',e:'🛏️'}],
+d:[{id:'d1',n:'UFC Gym Uzbekistan',pc:30,t:'Oylik obunaga',code:'FIT30',e:'🥊'},{id:'d2',n:'Gold’s Gym',pc:25,t:'Talaba obunasiga',code:'GOLD25',e:'🏋️'},{id:'d3',n:'Lemonfit (Yunusobod)',pc:20,t:'Oylik obunaga',code:'LEMON20',e:'💪'},{id:'d4',n:'Safia',pc:15,t:'Barcha ichimliklarga',code:'GO15',e:'☕'},{id:'d5',n:'LC Waikiki',pc:10,t:'Kiyim-kechakka',code:'GO10',e:'👕'}],o:[],q:[]};
+function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+var D={};for(var k in DEF)D[k]=load('sg3_'+k,DEF[k]);
+var cart=load('sg3_cart',{}),me=load('sg3_me',null);
+var view='home',sec='food',cat={food:0,shop:0},hf=0,ha='',admin=false,co={dt:'pickup',place:'',note:''},db=null;
+function $(i){return document.getElementById(i)}
+function money(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' so’m'}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function cnt(){var n=0;for(var k in cart)n+=cart[k];return n}
+function put(k,x){D[k].unshift(x);save('sg3_'+k,D[k]);if(k==='o'||k==='q')notify(k,x)}
+function notify(k,x){try{fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind:k,data:x})}).catch(function(){})}catch(e){}}
+function del(k,id){D[k]=D[k].filter(function(x){return x.id!==id});save('sg3_'+k,D[k]);if(db)db.collection(COL[k]).doc(id).delete().catch(function(){});render()}
+
+function reg(){var n=$('rn').value.trim(),p=$('rp').value.trim();if(!n||p.length<7){alert('Ism va telefon raqamni to’g’ri kiriting');return}me={name:n,phone:p};save('sg3_me',me);notify('r',me);render()}
+function go(v,s){view=v;if(s)sec=s;render();window.scrollTo(0,0)}
+function add(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];save('sg3_cart',cart);render()}
+function order(){
+  var it=[],tot=0;
+  D.p.forEach(function(x){if(cart[x.id]){it.push({n:x.n,q:cart[x.id],p:x.p});tot+=x.p*cart[x.id]}});
+  if(!it.length)return;
+  if(co.dt==='delivery'&&!co.place.trim()){alert('Yetkazish joyini yozing');return}
+  put('o',{id:'o'+Date.now(),t:Date.now(),name:me.name,phone:me.phone,items:it,total:tot,dt:co.dt,place:co.dt==='delivery'?co.place.trim():'—',note:co.note.trim(),s:'new'});
+  cart={};save('sg3_cart',cart);co={dt:'pickup',place:'',note:''};alert('Buyurtma qabul qilindi! ✅');go('orders')
+}
+function setS(id,s){D.o.forEach(function(o){if(o.id===id)o.s=s});save('sg3_o',D.o);if(db)db.collection('orders').doc(id).update({s:s}).catch(function(){});render()}
+function apply(id){var h=D.h.filter(function(x){return x.id===id})[0];if(!h)return;put('q',{id:'q'+Date.now(),t:Date.now(),name:me.name,phone:me.phone,what:h.n+' ('+h.a+')'});alert('Arizangiz yuborildi! Siz bilan bog’lanishadi. ✅')}
+function pin(){if($('pn').value===PIN){admin=true;render()}else alert('PIN noto’g’ri')}
+function v(i){return $(i).value.trim()}
+function addP(){var a=v('xc').split(':'),p=parseInt(v('xp'),10);if(!v('xn')||!p){alert('Nom va narxni kiriting');return}put('p',{id:'p'+Date.now(),s:a[0],c:parseInt(a[1],10),n:v('xn'),p:p,k:v('xk')||'—',e:v('xe')||'🛍️'});render()}
+function addH(){var p=parseInt(v('hp'),10);if(!v('hn')||!p){alert('Nom va narxni kiriting');return}put('h',{id:'h'+Date.now(),n:v('hn'),p:p,a:v('ha')||'—',r:v('hr')||'—',m:v('hm'),ph:v('hph'),e:'🏠'});render()}
+function addD(){var p=parseInt(v('dp'),10);if(!v('dn')||!p){alert('Hamkor va foizni kiriting');return}put('d',{id:'d'+Date.now(),n:v('dn'),pc:p,t:v('dt'),code:v('dc')||'GO'+p,e:v('de')||'🏷️'});render()}
+function back(){return '<button class="g sm" onclick="go(\'home\')">← Xizmatlar</button>'}
+function vHome(){
+  var T=[['food','🍽','Ovqat','Tez va hamyonbop','#ff7a3c,#ff4d6d'],['homes','🏠','Uy qidirish','Ijaraga uy va xonalar','#6d4aff,#9b6dff'],['deals','🏷️','Chegirmalar','Talabalar uchun aksiyalar','#1fb5a3,#3ddc97'],['shop','👕','Kiyim va aksessuar','Stil va qulaylik','#2f7bff,#2fc4ff']];
+  return '<h2>Salom, '+esc(me.name)+' 👋</h2><div class="mut">Kerakli xizmatni tanlang</div><div class="grid">'+T.map(function(t){
+    var tgt=t[0]==='food'||t[0]==='shop'?'go(\'cat\',\''+t[0]+'\')':'go(\''+t[0]+'\')';
+    return '<div class="tile" style="background:linear-gradient(135deg,'+t[4]+')" onclick="'+tgt+'"><i>'+t[1]+'</i><div><b>'+t[2]+'</b><br><span>'+t[3]+'</span></div></div>'}).join('')+'</div>';
+}
+function vCat(){
+  var C=sec==='food'?FC:SC,i=cat[sec],h=back()+'<h2>'+(sec==='food'?'🍽 Ovqat':'👕 Kiyim va aksessuar')+'</h2><div class="chips">'+C.map(function(c,j){return '<button class="'+(j===i?'':'g')+'" onclick="cat[sec]='+j+';render()">'+c+'</button>'}).join('')+'</div>';
+  D.p.filter(function(x){return x.s===sec&&x.c===i}).forEach(function(x){
+    var q=cart[x.id]||0;
+    h+='<div class="card row"><div class="em">'+esc(x.e)+'</div><div class="grow"><b>'+esc(x.n)+'</b><div class="mut">🏪 '+esc(x.k)+'</div><div class="price">'+money(x.p)+'</div></div>'+
+    (q?'<button class="g sm" onclick="add(\''+x.id+'\',-1)">−</button><b>'+q+'</b><button class="sm" onclick="add(\''+x.id+'\',1)">+</button>':'<button onclick="add(\''+x.id+'\',1)">Qo’shish</button>')+'</div>'});
+  return h;
+}
+function vHomes(){
+  var F=[['Hammasi',0],['≤ 1 mln',1000000],['≤ 2 mln',2000000],['≤ 3 mln',3000000]];
+  var h=back()+'<h2>🏠 Uy qidirish</h2><div class="chips">'+F.map(function(f){return '<button class="'+(hf===f[1]?'':'g')+'" onclick="hf='+f[1]+';render()">'+f[0]+'</button>'}).join('')+'</div>';
+  var AR=[];D.h.forEach(function(x){var g=x.a.split(',')[0];if(AR.indexOf(g)<0)AR.push(g)});h+='<div class="chips">'+['Barcha hudud'].concat(AR).map(function(g,i){var v=i?g:'';return '<button class="sm '+(ha===v?'':'g')+'" onclick="ha=\''+v+'\';render()">'+g+'</button>'}).join('')+'</div>';var l=D.h.filter(function(x){return (!hf||x.p<=hf)&&(!ha||x.a.split(',')[0]===ha)});
+  return h+(l.length?l.map(function(x){return '<div class="card"><div class="row"><div class="em">'+esc(x.e)+'</div><div class="grow"><b>'+esc(x.n)+'</b><div class="mut">📍 '+esc(x.a)+' · '+esc(x.r)+'</div><div class="mut">'+esc(x.m)+'</div></div></div><div class="row" style="margin-top:8px"><div class="price grow">'+(x.p?money(x.p)+' / oy':'Narxni so’rang')+'</div>'+(x.ph?'<a class="btn" href="tel:'+esc(x.ph)+'">📞 Qo’ng’iroq</a>':'')+'<button onclick="apply(\''+x.id+'\')">Ariza</button></div></div>'}).join(''):'<div class="card">Bunday e’lon topilmadi.</div>');
+}
+function vDeals(){
+  return back()+'<h2>🏷️ Chegirmalar</h2><div class="mut">Talaba ekanligingizni ko’rsating va kodni ayting</div>'+D.d.map(function(x){return '<div class="card row"><div class="pct">-'+x.pc+'%</div><div class="grow"><b>'+esc(x.e)+' '+esc(x.n)+'</b><div class="mut">'+esc(x.t)+'</div></div><button onclick="alert(\'Kod: '+esc(x.code)+'\')">Kod</button></div>'}).join('');
+}
+function vCart(){
+  var h=back()+'<h2>🛒 Savat</h2>',tot=0;
+  D.p.forEach(function(x){var q=cart[x.id];if(!q)return;tot+=x.p*q;
+    h+='<div class="card row"><div class="grow"><b>'+esc(x.n)+'</b><div class="mut">'+money(x.p)+' × '+q+'</div></div><button class="g sm" onclick="add(\''+x.id+'\',-1)">−</button><b>'+q+'</b><button class="sm" onclick="add(\''+x.id+'\',1)">+</button></div>'});
+  if(!tot)return h+'<div class="card">Savat bo’sh.</div>';
+  return h+'<div class="card"><div class="row"><b class="grow">Jami</b><div class="price">'+money(tot)+'</div></div>'+
+  '<div class="wrap"><button class="'+(co.dt==='pickup'?'':'g')+'" onclick="co.dt=\'pickup\';render()">🏃 Olib ketaman</button><button class="'+(co.dt==='delivery'?'':'g')+'" onclick="co.dt=\'delivery\';render()">🚚 Yetkazish</button></div>'+
+  (co.dt==='delivery'?'<input placeholder="Kampusda qayerga? (bino, xona)" value="'+esc(co.place)+'" oninput="co.place=this.value">':'')+
+  '<input placeholder="Izoh (ixtiyoriy)" value="'+esc(co.note)+'" oninput="co.note=this.value">'+
+  '<button style="width:100%;margin-top:6px" onclick="order()">✅ Buyurtma berish</button></div>';
+}
+function oCard(o,adm){
+  var h='<div class="card"><div class="row"><b class="grow">#'+esc(o.id.slice(-5))+(adm?' · '+esc(o.name)+' · '+esc(o.phone):'')+'</b><span class="st">'+ST[o.s]+'</span></div><div class="mut">'+o.items.map(function(i){return esc(i.n)+' ×'+i.q}).join(', ')+'</div><div>'+(o.dt==='delivery'?'🚚 '+esc(o.place):'🏃 Olib ketish')+(o.note?' · 💬 '+esc(o.note):'')+'</div><div class="price">'+money(o.total)+'</div>';
+  if(adm){h+='<div class="wrap">';['accepted','cooking','ready','done','cancelled'].forEach(function(s){h+='<button class="'+(o.s===s?'':'g')+' sm" onclick="setS(\''+o.id+'\',\''+s+'\')">'+ST[s]+'</button>'});h+='</div>'}
+  return h+'</div>';
+}
+function vOrders(){var l=D.o.filter(function(o){return o.phone===me.phone});return back()+'<h2>📦 Buyurtmalarim</h2>'+(l.length?l.map(function(o){return oCard(o,false)}).join(''):'<div class="card">Hali buyurtma yo’q.</div>')}
+function vAdmin(){
+  if(!admin)return '<h2>⚙️ Admin</h2><div class="card"><input id="pn" type="password" placeholder="PIN kod" inputmode="numeric"><button onclick="pin()">Kirish</button><div class="mut">Namuna PIN: 1234</div></div>';
+  var h='<h2>Buyurtmalar ('+D.o.length+')</h2>'+(D.o.length?D.o.map(function(o){return oCard(o,true)}).join(''):'<div class="card">Yo’q.</div>');
+  h+='<h2>Uy arizalari ('+D.q.length+')</h2>'+D.q.map(function(q){return '<div class="card"><b>'+esc(q.name)+'</b> · '+esc(q.phone)+'<div class="mut">'+esc(q.what)+'</div></div>'}).join('');
+  var opts=FC.map(function(c,i){return '<option value="food:'+i+'">Ovqat: '+c+'</option>'}).concat(SC.map(function(c,i){return '<option value="shop:'+i+'">Kiyim: '+c+'</option>'})).join('');
+  h+='<h2>Mahsulot qo’shish</h2><div class="card"><select id="xc">'+opts+'</select><input id="xn" placeholder="Nomi"><input id="xp" type="number" placeholder="Narxi"><input id="xk" placeholder="Kafe / do’kon"><input id="xe" placeholder="Emoji"><button onclick="addP()">Qo’shish</button></div>'+
+  '<h2>Uy e’loni qo’shish</h2><div class="card"><input id="hn" placeholder="Sarlavha"><input id="hp" type="number" placeholder="Oylik narx"><input id="ha" placeholder="Hudud"><input id="hr" placeholder="Xonalar"><input id="hm" placeholder="Qulayliklar"><input id="hph" type="tel" placeholder="Telefon"><button onclick="addH()">Qo’shish</button></div>'+
+  '<h2>Chegirma qo’shish</h2><div class="card"><input id="dn" placeholder="Hamkor nomi"><input id="dp" type="number" placeholder="Foiz"><input id="dt" placeholder="Nimaga chegirma"><input id="dc" placeholder="Kod"><input id="de" placeholder="Emoji"><button onclick="addD()">Qo’shish</button></div>'+
+  '<h2>Ro’yxatni boshqarish</h2>';
+  [['p','n'],['h','n'],['d','n']].forEach(function(t){D[t[0]].forEach(function(x){h+='<div class="card row"><div class="grow">'+esc(x.e)+' '+esc(x.n)+'</div><button class="g sm" onclick="del(\''+t[0]+'\',\''+x.id+'\')">🗑</button></div>'})});
+  return h;
+}
+function render(soft){
+  var a=document.activeElement;if(soft&&a&&/INPUT|SELECT/.test(a.tagName))return;
+  if(!me){$('app').innerHTML='<div class="card"><h2>Xush kelibsiz! 👋</h2><div class="mut">Davom etish uchun ism va telefon raqamingizni kiriting.</div><input id="rn" placeholder="Ismingiz"><input id="rp" type="tel" placeholder="Telefon raqamingiz"><button style="width:100%;margin-top:6px" onclick="reg()">Boshlash</button></div>';$('nav').innerHTML='';return}
+  $('app').innerHTML={home:vHome,cat:vCat,homes:vHomes,deals:vDeals,cart:vCart,orders:vOrders,admin:vAdmin}[view]();
+  var n=cnt();
+  $('nav').innerHTML=[['home','🏠 Xizmatlar'],['cart','🛒 Savat'+(n?' <span class="badge">'+n+'</span>':'')],['orders','📦 Buyurtmalar']].concat(location.hash==='#admin'?[['admin','⚙️ Admin']]:[]).map(function(t){return '<button class="'+(view===t[0]?'on':'')+'" onclick="go(\''+t[0]+'\')">'+t[1]+'</button>'}).join('');
+}
+try{if(!localStorage.getItem('sg3_seen')){localStorage.setItem('sg3_seen','1');notify('v',{})}}catch(e){}
+render();
+</script>
+</body>
+</html>
