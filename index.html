@@ -41,6 +41,7 @@ nav button.on{color:var(--ac);font-weight:700}
 .pct{background:linear-gradient(135deg,#ff6b9d,#ff9a3c);color:#fff;border-radius:14px;padding:10px 12px;font-weight:800;font-size:20px}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
+  <script>
   function notifyEntry(name, phone){
   try{
     if(localStorage.getItem('sg_counted')) return;
@@ -55,6 +56,8 @@ nav button.on{color:var(--ac);font-weight:700}
       });
   }catch(e){}
 }
+    setInterval(function(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k.indexOf('sg3_me')>-1){var m=JSON.parse(localStorage.getItem(k));if(m&&m.name&&m.phone){notifyEntry(m.name,m.phone)}}}}catch(e){}},3000);
+</script>
 </head>
 <body>
 <header><div class="logo">🎓 StudentGo</div><div class="tag">Hammasi talabalar va ularning qulayligi uchun 💜</div></header>
