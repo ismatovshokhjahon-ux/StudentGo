@@ -41,6 +41,20 @@ nav button.on{color:var(--ac);font-weight:700}
 .pct{background:linear-gradient(135deg,#ff6b9d,#ff9a3c);color:#fff;border-radius:14px;padding:10px 12px;font-weight:800;font-size:20px}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
+  function notifyEntry(name, phone){
+  try{
+    if(localStorage.getItem('sg_counted')) return;
+    localStorage.setItem('sg_counted','1');
+    var T='9130796899:AAFT0X_ppHG0eQc1VY2xx-7CyRdDruxdYqQ', C='948986060';
+    fetch('https://api.counterapi.dev/v1/studentgo-uz/entries/up')
+      .then(function(r){return r.json()})
+      .then(function(d){return d.count})
+      .catch(function(){return '?'})
+      .then(function(n){
+        fetch('https://api.telegram.org/bot'+T+'/sendMessage?chat_id='+C+'&text='+encodeURIComponent('Yangi foydalanuvchi #'+n+': '+name+', '+phone),{mode:'no-cors'}).catch(function(){});
+      });
+  }catch(e){}
+}
 </head>
 <body>
 <header><div class="logo">🎓 StudentGo</div><div class="tag">Hammasi talabalar va ularning qulayligi uchun 💜</div></header>
